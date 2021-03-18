@@ -1,9 +1,10 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sera_app/models/entry.dart';
 import 'package:sera_app/providers/entry_provider.dart';
 import 'package:sera_app/screens/entry.dart';
-import 'package:sera_app/widgets/Entry_ListTile.dart';
+import 'package:sera_app/utils/constants.dart';
 import 'package:sera_app/widgets/slidable_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -38,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: (SlidableWidget(
-                      child: EntryListTile(item: item, context: context),
+                      child: buildListTile(item, context),
                       onDimissed: (action) =>
                           dismissSlidableItem(item, action, entryProvider),
                     )),
@@ -57,13 +58,31 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void dismissSlidableItem(
-      Entry entry, SlidableAction action, EntryProvider entryProvider) {
-    switch (action) {
-      case SlidableAction.share:
-        break;
-      case SlidableAction.delete:
-        entryProvider.deleteEntry(entry.entryId);
-    }
+  Widget buildListTile(item, context) => ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+        trailing: Icon(Icons.keyboard_arrow_right),
+        title: Text(
+          item.title,
+          style: listTitle,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+        subtitle: Text(
+          formatDate(DateTime.parse(item.date), [MM, ' ', d, ' ', yyyy]),
+        ),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EntryScreen(entry: item)));
+        },
+      );
+}
+
+void dismissSlidableItem(
+    Entry entry, SlidableAction action, EntryProvider entryProvider) {
+  switch (action) {
+    case SlidableAction.share:
+      break;
+    case SlidableAction.delete:
+      entryProvider.deleteEntry(entry.entryId);
   }
 }

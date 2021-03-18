@@ -6,9 +6,9 @@ import 'package:sera_app/utils/constants.dart';
 
 class EntryListTile extends StatelessWidget {
   const EntryListTile({
-    Key key,
-    @required this.context,
-    @required this.item,
+    @required Key key,
+    this.context,
+    this.item,
   }) : super(key: key);
 
   final BuildContext context;
