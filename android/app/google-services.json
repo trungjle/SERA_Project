@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "17697962710",
+    "project_id": "sera-project-56cf3",
+    "storage_bucket": "sera-project-56cf3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17697962710:android:15fb78d499316bfff4e777",
+        "android_client_info": {
+          "package_name": "com.example.sera_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17697962710-pour50aqebresse439vr9sk0qkigthtd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8FgJbtPpRthDYGvscUZY_6wS0I3OeE2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17697962710-pour50aqebresse439vr9sk0qkigthtd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
