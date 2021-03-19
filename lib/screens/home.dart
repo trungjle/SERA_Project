@@ -1,11 +1,9 @@
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sera_app/models/entry.dart';
 import 'package:sera_app/providers/entry_provider.dart';
 import 'package:sera_app/screens/entry.dart';
-import 'package:sera_app/utils/constants.dart';
-import 'package:sera_app/widgets/slidable_widget.dart';
+import 'package:sera_app/widgets/Entry_ListTile.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -21,9 +19,9 @@ class HomeScreen extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: ListView.builder(
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  final item = snapshot.data[index];
+                  final item = snapshot.data![index];
                   return Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -38,11 +36,11 @@ class HomeScreen extends StatelessWidget {
                           ]),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: (SlidableWidget(
-                      child: buildListTile(item, context),
-                      onDimissed: (action) =>
-                          dismissSlidableItem(item, action, entryProvider),
-                    )),
+                    child: EntryListTile(
+                      key: UniqueKey(),
+                      item: item,
+                      context: context,
+                    ),
                   );
                 },
               ),
@@ -51,38 +49,18 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => EntryScreen()));
+          var entry = new Entry(
+              content: '',
+              title: '',
+              entryId: '',
+              date: DateTime.now().toIso8601String());
+
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EntryScreen(
+                    entry: entry,
+                  )));
         },
       ),
     );
-  }
-
-  Widget buildListTile(item, context) => ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16),
-        trailing: Icon(Icons.keyboard_arrow_right),
-        title: Text(
-          item.title,
-          style: listTitle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-        subtitle: Text(
-          formatDate(DateTime.parse(item.date), [MM, ' ', d, ' ', yyyy]),
-        ),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => EntryScreen(entry: item)));
-        },
-      );
-}
-
-void dismissSlidableItem(
-    Entry entry, SlidableAction action, EntryProvider entryProvider) {
-  switch (action) {
-    case SlidableAction.share:
-      break;
-    case SlidableAction.delete:
-      entryProvider.deleteEntry(entry.entryId);
   }
 }

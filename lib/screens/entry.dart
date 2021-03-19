@@ -8,7 +8,7 @@ import 'package:sera_app/utils/constants.dart';
 class EntryScreen extends StatefulWidget {
   final Entry entry;
 
-  EntryScreen({this.entry});
+  EntryScreen({required this.entry});
 
   @override
   _EntryScreenState createState() => _EntryScreenState();
@@ -28,14 +28,14 @@ class _EntryScreenState extends State<EntryScreen> {
   @override
   void initState() {
     final entryProvider = Provider.of<EntryProvider>(context, listen: false);
-    if (widget.entry != null) {
+    if (widget.entry.entryId != '') {
       //Edit
       contentController.text = widget.entry.content;
       titleController.text = widget.entry.title;
       entryProvider.loadAll(widget.entry);
     } else {
       //Add
-      entryProvider.loadAll(null);
+      entryProvider.loadAll(widget.entry);
     }
     super.initState();
   }
@@ -51,13 +51,11 @@ class _EntryScreenState extends State<EntryScreen> {
               icon: Icon(Icons.calendar_today),
               onPressed: () {
                 _pickDate(context, entryProvider).then((value) {
-                  if (value != null) {
-                    entryProvider.changeDate = value;
-                  }
+                  entryProvider.changeDate = value;
                 });
               },
             ),
-            (widget.entry != null)
+            (widget.entry.entryId != '')
                 ? IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () {
@@ -113,14 +111,11 @@ class _EntryScreenState extends State<EntryScreen> {
   // ignore: missing_return
   Future<DateTime> _pickDate(
       BuildContext context, EntryProvider entryProvider) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime picked = (await showDatePicker(
         context: context,
         initialDate: entryProvider.date,
         firstDate: DateTime(2020),
-        lastDate: DateTime.now());
-
-    if (picked != null) {
-      return picked;
-    }
+        lastDate: DateTime.now()))!;
+    return picked;
   }
 }

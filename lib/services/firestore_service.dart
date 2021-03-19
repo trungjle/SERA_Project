@@ -7,7 +7,7 @@ class FirestoreService {
   //Get Entries
   Stream<List<Entry>> getEntries() {
     return _db.collection('entries').snapshots().map((snapshot) =>
-        snapshot.docs.map((doc) => Entry.fromJSON(doc.data())).toList());
+        snapshot.docs.map((doc) => Entry.fromJSON(doc.data()!)).toList());
   }
 
   //Add/Update(Upsert)

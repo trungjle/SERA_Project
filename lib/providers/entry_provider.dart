@@ -6,10 +6,10 @@ import 'package:uuid/uuid.dart';
 class EntryProvider with ChangeNotifier {
   final firestoreService = FirestoreService();
 
-  DateTime _date;
-  String _content;
-  String _title;
-  String _entryId;
+  late DateTime _date;
+  late String _content;
+  late String _title;
+  late String _entryId;
   var uuid = Uuid();
 
   //Getters
@@ -39,21 +39,21 @@ class EntryProvider with ChangeNotifier {
   //Functions
 
   loadAll(Entry entry) {
-    if (entry != null) {
+    if (entry.entryId != '') {
       _date = DateTime.parse(entry.date);
       _content = entry.content;
       _title = entry.title;
       _entryId = entry.entryId;
     } else {
       _date = DateTime.now();
-      _title = null;
-      _content = null;
-      _entryId = null;
+      _title = '';
+      _content = '';
+      _entryId = '';
     }
   }
 
   saveEntry() {
-    if (_entryId == null) {
+    if (_entryId == '') {
       //Add
       var newEntry = Entry(
           date: _date.toIso8601String(),
