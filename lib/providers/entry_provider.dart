@@ -10,12 +10,14 @@ class EntryProvider with ChangeNotifier {
   late String _content;
   late String _title;
   late String _entryId;
+  late String _emotion;
   var uuid = Uuid();
 
   //Getters
   DateTime get date => _date;
   String get content => _content;
   String get title => _title;
+  String get emotion => _emotion;
   Stream<List<Entry>> get entries => firestoreService.getEntries();
 
   //Setters
@@ -36,20 +38,19 @@ class EntryProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set changeEmotion(String emotion) {
+    _emotion = emotion;
+    notifyListeners();
+  }
+
   //Functions
 
   loadAll(Entry entry) {
-    if (entry.entryId != '') {
-      _date = DateTime.parse(entry.date);
-      _content = entry.content;
-      _title = entry.title;
-      _entryId = entry.entryId;
-    } else {
-      _date = DateTime.now();
-      _title = '';
-      _content = '';
-      _entryId = '';
-    }
+    _date = DateTime.parse(entry.date);
+    _content = entry.content;
+    _title = entry.title;
+    _emotion = entry.emotion;
+    _entryId = entry.entryId;
   }
 
   saveEntry() {
@@ -59,6 +60,7 @@ class EntryProvider with ChangeNotifier {
           date: _date.toIso8601String(),
           title: _title,
           content: _content,
+          emotion: _emotion,
           entryId: uuid.v1());
       firestoreService.setEntry(newEntry);
     } else {
@@ -66,7 +68,8 @@ class EntryProvider with ChangeNotifier {
           date: _date.toIso8601String(),
           title: _title,
           content: _content,
-          entryId: _entryId);
+          entryId: _entryId,
+          emotion: _emotion);
       firestoreService.setEntry(updatedEntry);
     }
   }

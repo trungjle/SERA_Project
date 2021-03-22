@@ -53,8 +53,8 @@ class HomeScreen extends StatelessWidget {
               content: '',
               title: '',
               entryId: '',
-              date: DateTime.now().toIso8601String());
-
+              date: DateTime.now().toIso8601String(),
+              emotion: '');
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => EntryScreen(
                     entry: entry,

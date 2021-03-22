@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sera_app/models/entry.dart';
 import 'package:sera_app/providers/entry_provider.dart';
+import 'package:sera_app/screens/record.dart';
 import 'package:sera_app/utils/constants.dart';
 
 class EntryScreen extends StatefulWidget {
@@ -28,14 +29,10 @@ class _EntryScreenState extends State<EntryScreen> {
   @override
   void initState() {
     final entryProvider = Provider.of<EntryProvider>(context, listen: false);
+    entryProvider.loadAll(widget.entry);
     if (widget.entry.entryId != '') {
-      //Edit
       contentController.text = widget.entry.content;
       titleController.text = widget.entry.title;
-      entryProvider.loadAll(widget.entry);
-    } else {
-      //Add
-      entryProvider.loadAll(widget.entry);
     }
     super.initState();
   }
@@ -53,6 +50,15 @@ class _EntryScreenState extends State<EntryScreen> {
                 _pickDate(context, entryProvider).then((value) {
                   entryProvider.changeDate = value;
                 });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.record_voice_over),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => RecordSpeech(
+                          entry: widget.entry,
+                        )));
               },
             ),
             (widget.entry.entryId != '')
@@ -108,14 +114,17 @@ class _EntryScreenState extends State<EntryScreen> {
     );
   }
 
-  // ignore: missing_return
   Future<DateTime> _pickDate(
       BuildContext context, EntryProvider entryProvider) async {
-    final DateTime picked = (await showDatePicker(
+    final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: entryProvider.date,
         firstDate: DateTime(2020),
-        lastDate: DateTime.now()))!;
-    return picked;
+        lastDate: DateTime.now());
+    if (picked != null) {
+      return picked;
+    } else {
+      return entryProvider.date;
+    }
   }
 }
